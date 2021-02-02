@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang='en-AU'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width = device-width, initial-scale = 1' />
+    <title>Dumb</title>
+    <link rel='stylesheet' href='css/style.css'>
+    <script defer src='js/notate.js'></script>
+    <script defer src='js/save.js'></script>
+    <script defer src='js/formulas.js'></script>
+    <script defer src='js/ranks.js'></script>
+    <script defer src='js/script.js'></script>
+  </head>
+  <body>
+    <p id='versionDisplay'>Incremental Limited <span id='version'>bad game</span><br><a href='ChangeLog'>ChangeLog</a></p>
+    <p id='mainDisplay'>
+      <span id='numberDisplay'>You have <span id='number' class='emphasise'>0</span>.</span><br /><span id='gainDisplay'>+<span id='gain'>0.1</span>/s, max +<span id='maxGain' style='emphasise'>0.1</span>/s.</span></span>
+      <br />
+      <span id='limitDisplay'>Your Limit is currently <span id='limit'>1</span></span>
+    </p>
+    <div id='buyMultipliers'>
+      <button data-ratio='0.01' class='increaserBuyMultiplier' onclick='changeIncreaserBuyMultiplier(0.01)'>1%</button>
+      <button data-ratio='0.1' class='increaserBuyMultiplier' onclick='changeIncreaserBuyMultiplier(0.1)'>10%</button>
+      <button data-ratio='0.25' class='increaserBuyMultiplier' onclick='changeIncreaserBuyMultiplier(0.25)'>25%</button>
+      <button data-ratio='0.5' class='increaserBuyMultiplier' onclick='changeIncreaserBuyMultiplier(0.5)'>50%</button>
+      <button data-ratio='1' class='increaserBuyMultiplier' onclick='changeIncreaserBuyMultiplier(1)'>100%</button>
+    </div>
+    <div id='increasers'>
+      <button id='gainIncreaser' class='increaser' onclick='increaseGain()'>Increase gain per second!<br />(+<span id='pendingGainIncrease' class='emphasise'>0.000</span>)</button>
+      <button id='limitIncreaser' class='increaser' onclick='increaseLimit()'>Increase your Limit!<br />(+<span id='pendingLimitIncrease' class='emphasise'>0.000</span>)</button>
+    </div>
+    <div id='tabButtons'>
+      <button class='tabButton' onclick='tab(1)'>Number</button>
+      <button class='tabButton' onclick='tab(2)'>Settings</button>
+      <!--<button class='tabButton' onclick='tab(3)'>Achievements</button>
+      <button class='tabButton' onclick='tab(4)'>Ranks</button>-->
+    </div>
+    <div id='tabs'>
+      <div class='tab' style='display: none'>
+        <p>Upgrades</p>
+        <button class='upgrader' onclick='buyUpgrade(1)'>Limit is increased by 50.<br />Cost: 20</button>
+        <button class='upgrader' onclick='buyUpgrade(2)'>Double gain per second.<br />Cost: 50</button>
+        <button class='upgrader' onclick='buyUpgrade(3)'>Gain per second is raised to the 1.05.<br />Cost: 100</button>
+        <button class='upgrader' onclick='buyUpgrade(4)'>Investing in the Limit increaser is more effective.<br />Cost: 200</button>
+        <button class='upgrader' onclick='buyUpgrade(5)'>Limit is multiplied based on Gain per second.<br />Currently: x<span id='upgrade5Effect'>1.00</span><br />Cost: 300</button>
+        <button class='upgrader' onclick='buyUpgrade(6)'>Investing in increasers is 1.25x more effective. <br />Cost: 500</button>
+        <button class='upgrader' onclick='buyUpgrade(7)'>Quadruple Gain per second!<br />Cost: 1000</button>
+        <br />
+        <p>Unlocks</p>
+        <button class='unlocker' onclick='buyUnlock(1)'>Unlock a button to increase Gain.<br />Cost: 10</button>
+        <button class='unlocker' onclick='buyUnlock(2)'>Unlock a button to increase Limit.<br />Cost: 100</button>
+        <button class='unlocker' onclick='buyUnlock(3)'>Unlock Buy Multipliers for Increasers.<br />Cost: 500</button>
+        <!--<button class='unlocker' onclick='buyUnlock(4)'>Unlock Time Until Effectively Reaching Limit.<br />Cost: 100</button>-->
+      </div>
+      <div class='tab' style='display: none'>
+        Settings go here...
+        <br />
+        <button id='copyButton' onclick='copySave()'>Copy to clipboard</button>
+        <button id='importButton' onclick='importSave()'>Import Save</button>
+        <br />
+      </div>
+      <div class='tab' style='display: none'>
+        What useless feats you have achieved in this virtual game...
+      </div>
+      <div class='tab' style='display: none'>
+        Rank up for additional bonuses!
+        <br />
+        You are currently Rank <span id='currentRank' class='emphasise'>A</span>.
+        <br />
+        Requirement for Rank <span id='nextRank' class='emphasise'>B</span>: <span id='nextRankRequirement' class='emphasise'>1k</span>
+        <br />
+        <div id='ranks'>
+          
+        </div>
+        Rank A: curent rank. nothing
+        <br />
+        Rank B: next rank. 5% to Gain and Limit.
+      </div>
+    </div>
+    <input id='exportSaveData' />
+  </body>
+</html>

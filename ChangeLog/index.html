@@ -1,0 +1,66 @@
+<!doctype html>
+<!-- NOTE:
+Eras are h1 (such as Early Versions, Content or something like that).
+Content-based updates are h2.
+Balancing/Decently big bugfixing Updates are h3.
+Small (QoL/very small/bugfixing) updates are h4.
+-->
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0' />
+    <!--CSS stuff-->
+    <style>
+      html {
+        touch-action: manipliation;
+        font-family: helvetica, arial, sans-serif;
+      }
+      .intro-txt {
+        font-size: 25px;
+        font-weight: bold;
+      }
+      .center {
+        text-align: center;
+      }
+      li {
+        padding: 2px;
+      }
+    </style>
+    <script>var url=location.href,gl=document.getElementById('backToGameButton');function backToGame(){location.href='/Incremental-Limited'}</script>
+  </head>
+  <body>
+    <p class='intro-txt center'>
+      Welcome to the Incremental Limited ChangeLog!
+    </p>
+    <p class='center'>
+      <i>
+        Here is the history of changes made to the game.
+      </i>
+    </p>
+    <button id='backToGameButton' onclick='backToGame()'>
+      Back to Game
+    </button>
+    <button onclick='window.scrollTo(0,document.body.scrollHeight);'>
+      View Recent Patch
+    </button>
+    <div id='updates-list'>
+      <h2>v1.0000</h2>
+      Summary:
+      <ul>
+        <li>Originally started out as a test game.</li>
+        <li>Added Limit and the gain decrease scaling concept (gain is divided by [limit divided by the difference between number and limit]).</li>
+        <li>Implemented the 1st 2 increaser buttons; the limit and gain increasers.
+          <ul><li>And the 1%, 10%, 25%, 50%, and 100% increaser buy mlitipliers to go along with it.</li></ul>
+        </li>
+        <li>Included the 1st 7 upgrades and the 1st 3 unlocks.</li>
+        <li>Colour-coding for the upgrade and unlock buttons.
+          <ul>
+            <li>Green = bought, Light Green = buyable & pointer cursor, Yellow = reachable and Grey = unreachable & not-allowed cursor.</li>
+          </ul>
+        </li>
+        <li>Number and Settings tabs.</li>
+        <li>Simple, bare-bones import/export system. Hovering on the <i>Copy to clipboard</i> button sets the cursor to 'copy'.</li>
+      </ul>
+    </div><!-- End of Updates list. -->
+  </body>
+</html>

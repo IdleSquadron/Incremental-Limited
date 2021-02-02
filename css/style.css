@@ -1,0 +1,155 @@
+html {
+  font-size: 20px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+  text-align: center;
+
+}
+
+p {
+  display: block;
+  margin-block-start: 20px;
+  margin-block-end: 20px;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+button {
+  background-color: #eeeeee;
+  outline: none; /* Remove the dumb outline when clicking on a button :D */
+}
+
+#versionDisplay {
+  text-align: left;
+  font-size: 17.5px;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+}
+#numberDisplay {
+  font-size: larger;
+}
+
+#number {
+  font-weight: bold;
+  font-size: larger;
+}
+
+#limit {
+  font-weight: bold;
+  font-size: larger;
+}
+
+#limitIncreaseGainDisplay {
+  font-size: smaller;
+}
+
+#pendingLimitIncrease {
+  font-weight: bold;
+  font-size: larger;
+}
+
+#maxGain {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.emphasise {
+  font-weight: bold;
+  font-size: larger;
+}
+
+/* .unlocker {
+
+} */
+
+.increaser {
+  margin: 5px 5px;
+}
+
+#increasers {
+  margin: auto;
+  width: fit-content;
+  height: 50px;
+}
+
+.upgrader.bought, .unlocker.bought {
+  background-color: #10cc10;
+}
+
+.upgrader.buyable, .unlocker.buyable {
+  background-color: #adfead;
+  cursor: pointer;
+}
+
+.upgrader.reachable, .unlocker.reachable {
+  background-color: #efefcc;
+}
+
+.upgrader.unreachable, .unlocker.unreachable {
+  cursor: not-allowed;
+}
+
+.increaserBuyMultiplier.selected {
+  background-color: #1f4fff;
+}
+.increaserBuyMultiplier.unselected {
+  background-color: #969696;
+}
+
+.tabButton {
+  width: 140px;
+  height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+#ranks {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: auto;
+  width: fit-content;
+}
+
+.ranks-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: auto;
+  width: fit-content;
+}
+
+.rank {
+  position: relative;
+  width: 125px;
+  height: 125px;
+  border: 2px solid black;
+  padding: 3px 3px;
+  border-radius: 10px;
+  background: #a0a0a0;
+  text-align: center;
+  overflow: none;
+  z-index: 1;
+  margin: 2px 3px;
+  transition-duration: 333ms;
+  font-size: smaller;
+}
+
+#copyButton {
+  cursor: copy;
+}
+
+#exportSaveData {
+  position: absolute;
+  left: 1e308px;
+}
+/* Upgrader/Unlocker CSS classes:
+  'unreachable': If the limit does not meet the cost. CSS: cursor: not-allowed;
+  'reachable': If the limit meets the cost, but the number does not. CSS: background-color: #ddddcc;
+  'buyable': If the number meets the cost. CSS: background-color: #adfead; cursor: pointer;
+*/
+
+/*
+  Delimit for x delimiters! idk
+*/
