@@ -3,9 +3,12 @@ function reset() {
     number: 0,
     pointsInvestedInLimit: 0,
     pointsInvestedInGain: 0,
+    pointsInvestedInEffectiveness: 0,
     settings: {
       increaserBuyMultiplier: 1,
       ticksPerSecond: 30,
+      doAutoSaving: true,
+      autoSavesPerMinute: 60,
     },
     time: {
       lastTick: Date.now(),
@@ -15,6 +18,10 @@ function reset() {
     upgrades: [],
     rank: 0,
   };
+};
+
+function autoSave() {
+  localStorage["IncrementalLimitedSave"] = JSON.stringify(player);
 };
 
 function importSave() {
@@ -32,7 +39,7 @@ function importSave() {
 
 function loadImportedSave(saveToLoad) {
   reset();
-  if(saveToLoad) {
+  if (saveToLoad) {
     let savething = JSON.parse(saveToLoad);
     savething = convertOldSave(savething);
     applySave(savething);
@@ -40,13 +47,30 @@ function loadImportedSave(saveToLoad) {
 };
 
 function convertOldSave(save) {
-  //coming soon
+  if (save.settings.autoSavesPerMinute === undefined) save.settings.autoSavesPerMinute = 60;
+  if (save.pointsInvestedInEffectiveness === undefined) save.pointsInvestedInEffectiveness = 0;
+  if (save.settings.doAutoSaving === undefined) save.settings.doAutoSaving = true;
+  if (save.settings.autoSavesPerMinute === undefined) save.settings.autoSavesPerMinute = 60;
   return save;
 };
 
 function applySave(save) {
-  for (let x in player) player[x] = save[x];
+  for (let x in save) player[x] = save[x];
 };
+
+function loadSave() {
+  let localSave = localStorage["IncrementalLimitedSave"];
+  if (localSave) {
+    let saveToLoad;
+    try {
+      saveToLoad = JSON.parse(localSave);
+    } catch(err) {
+      reset();
+    }
+    saveToLoad = convertOldSave(saveToLoad);
+    applySave(saveToLoad);
+  }
+}
 
 function copySave() {
   let copy = document.getElementById('exportSaveData');

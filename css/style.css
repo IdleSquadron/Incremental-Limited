@@ -1,14 +1,36 @@
+/* I am very bad at CSS */
+:root {
+  --progress-bar-width-px: 240;
+  --progress-bar-height-px: 24;
+}
+
 html {
   font-size: 20px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
   text-align: center;
+  cursor: default;
+}
 
+body {
+  margin: 5px;
+  box-sizing: border-box;
+}
+
+a {
+  cursor: alias;
 }
 
 p {
   display: block;
-  margin-block-start: 20px;
-  margin-block-end: 20px;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.5em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+h2 {
+  margin-block-start: 0em;
+  margin-block-end: 0.5em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
 }
@@ -16,15 +38,86 @@ p {
 button {
   background-color: #eeeeee;
   outline: none; /* Remove the dumb outline when clicking on a button :D */
+  cursor: pointer; /* At default. */
 }
 
-#versionDisplay {
+button[disabled] {
+  cursor: not-allowed;
+}
+
+.progressBar {
+  position: relative;
+  height: calc(1px * var(--progress-bar-height-px));/*24px*/
+  width: calc(1px * var(--progress-bar-width-px));/*240px*/
+  transition-duration: 200ms;
+  cursor: help;
+  margin: 0 auto;
+  border-radius: 12px / 12px;
+  border: 2px solid #969696;
+  background-color: #eeeeee;
+}
+
+.progressMeter {
+  background-color: #0069ff;
+  border-radius: 10px / 10px;
+  height: 100%;
+  width: 100%;
+}
+
+.progressBar:after {
+  position: absolute;
+  background-color: black;
+  content: attr(data-width)'%';
+  color: white;
+  opacity: 0;
+  visibility: hidden;
+  display: block;
+  transition-duration: 200ms;
+  padding: 10px;
+  border-radius: 5px;
+  bottom: 30px;
+  text-align: center;
+  width: 60px;
+  left: calc(50% - 40px);
+  pointer-events: none; /* To make sure when the tooltip is shown, it is unhoverable. */
+}
+
+.progressBar:hover {
+  opacity: 0.85;
+}
+
+.progressBar:hover:after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.on {
+  background-color: #42dd42;
+  border-color: #00ff00;
+}
+
+.off {
+  background-color: #dd4242;
+  border-color: #ff0000;
+}
+
+#importButton {
+  cursor: alias;
+}
+#statusDisplay {
+  font-size: smaller;
   text-align: left;
   font-size: 17.5px;
-  position: absolute;
-  margin: 0;
-  padding: 0;
+  position: fixed;
+  margin: 0px;
+  padding: 0px;
+  z-index: 0;
 }
+
+#mainDisplay {
+  margin-top: 10px;
+}
+
 #numberDisplay {
   font-size: larger;
 }
@@ -39,8 +132,12 @@ button {
   font-size: larger;
 }
 
-#limitIncreaseGainDisplay {
+#effectivenessDisplay {
   font-size: smaller;
+}
+
+.increaserBuyMultiplier.selected {
+  cursor: inherit;
 }
 
 #pendingLimitIncrease {
@@ -48,14 +145,22 @@ button {
   font-size: larger;
 }
 
-#maxGain {
+.emphasise {
   font-weight: bold;
   font-size: larger;
 }
 
-.emphasise {
+#tabButtons {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.tabButton {
+  width: 140px;
+  height: 50px;
+  font-size: 18px;
   font-weight: bold;
-  font-size: larger;
+  border-radius: 10px;
 }
 
 /* .unlocker {
@@ -72,8 +177,13 @@ button {
   height: 50px;
 }
 
+.upgrader, .unlocker {
+  margin: 2.5px;
+}
+
 .upgrader.bought, .unlocker.bought {
   background-color: #10cc10;
+  cursor: inherit;
 }
 
 .upgrader.buyable, .unlocker.buyable {
@@ -83,6 +193,7 @@ button {
 
 .upgrader.reachable, .unlocker.reachable {
   background-color: #efefcc;
+  cursor: inherit;
 }
 
 .upgrader.unreachable, .unlocker.unreachable {
@@ -94,14 +205,6 @@ button {
 }
 .increaserBuyMultiplier.unselected {
   background-color: #969696;
-}
-
-.tabButton {
-  width: 140px;
-  height: 50px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 10px;
 }
 
 #ranks {
@@ -141,8 +244,13 @@ button {
 }
 
 #exportSaveData {
-  position: absolute;
-  left: 1e308px;
+  position: fixed;
+  left: 1e4px;
+}
+
+#upgradesList, #unlocksList {
+  width: 1250px;
+  margin: 0 auto;
 }
 /* Upgrader/Unlocker CSS classes:
   'unreachable': If the limit does not meet the cost. CSS: cursor: not-allowed;

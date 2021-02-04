@@ -2,6 +2,10 @@
 <html lang='en-AU'>
   <head>
     <meta charset='UTF-8' />
+    <meta name='author' content='IdleSquadron' />
+    <meta name='description' content='An incremental game about increasing your number and expanding the limit to your number in order to progress further.' />
+    <meta name='keywords' content='idlesquadron game idle incremental limit limited cool slow' />
+    <meta http-equiv='default-style' content='css/style.css' />
     <meta name='viewport' content='width = device-width, initial-scale = 1' />
     <title>Incremental Limited</title>
     <link rel='stylesheet' href='css/style.css'>
@@ -9,12 +13,23 @@
     <script defer src='js/save.js'></script>
     <script defer src='js/formulas.js'></script>
     <script defer src='js/ranks.js'></script>
+    <script defer src='js/upgrades-and-unlocks.js'></script>
     <script defer src='js/script.js'></script>
+    <script defer src='js/settings.js'></script>
   </head>
   <body>
-    <p id='versionDisplay'>Incremental Limited <span id='version'>bad game</span><br><a href='ChangeLog'>ChangeLog</a></p>
+    <p id='statusDisplay'>Incremental Limited <span id='version'>bad game</span>
+      <br>
+      <span id='autoSavingDisplay'>The game automatically saves every 1 second.</span>
+      <br />
+      <span id='fpsDisplay'>The game currently runs at 30 ticks per second.</span>
+      <br />
+      <a href='ChangeLog' target='_blank' onclick='autoSave()'>ChangeLog</a>
+    </p>
     <p id='mainDisplay'>
-      <span id='numberDisplay'>You have <span id='number' class='emphasise'>0</span>.</span><br /><span id='gainDisplay'>+<span id='gain'>0.1</span>/s, max +<span id='maxGain' style='emphasise'>0.1</span>/s.</span></span>
+      <span id='numberDisplay'>You have <span id='number' class='emphasise'>0</span>.</span>
+      <br />
+      <span id='gainDisplay'>+<span id='gain'>0.1</span>/s, max +<span id='maxGain' class='emphasise'>0.1</span>/s.</span></span>
       <br />
       <span id='limitDisplay'>Your Limit is currently <span id='limit'>1</span></span>
     </p>
@@ -26,9 +41,11 @@
       <button data-ratio='1' class='increaserBuyMultiplier' onclick='changeIncreaserBuyMultiplier(1)'>100%</button>
     </div>
     <div id='increasers'>
-      <button id='gainIncreaser' class='increaser' onclick='increaseGain()'>Increase gain per second!<br />(+<span id='pendingGainIncrease' class='emphasise'>0.000</span>)</button>
+      <button id='gainIncreaser' class='increaser' onclick='increaseGain()'>Increase Gain per Second!<br />(+<span id='pendingGainIncrease' class='emphasise'>0.000</span>)</button>
       <button id='limitIncreaser' class='increaser' onclick='increaseLimit()'>Increase your Limit!<br />(+<span id='pendingLimitIncrease' class='emphasise'>0.000</span>)</button>
+      <button id='effectivenessIncreaser' class='increaser' onclick='increaseEffectiveness()'>Increase Investing Effectiveness!<br />(+<span id='pendingEffectivenessIncrease' class='emphasise'>0.000</span>)</button>
     </div>
+    <span id='effectivenessDisplay'>Your Investing Effectiveness is x<span id='effectiveness' class='emphasise'>1.000</span></span>
     <div id='tabButtons'>
       <button class='tabButton' onclick='tab(1)'>Number</button>
       <button class='tabButton' onclick='tab(2)'>Settings</button>
@@ -37,27 +54,23 @@
     </div>
     <div id='tabs'>
       <div class='tab' style='display: none'>
-        <p>Upgrades</p>
-        <button class='upgrader' onclick='buyUpgrade(1)'>Limit is increased by 50.<br />Cost: 20</button>
-        <button class='upgrader' onclick='buyUpgrade(2)'>Double gain per second.<br />Cost: 50</button>
-        <button class='upgrader' onclick='buyUpgrade(3)'>Gain per second is raised to the 1.05.<br />Cost: 100</button>
-        <button class='upgrader' onclick='buyUpgrade(4)'>Investing in the Limit increaser is more effective.<br />Cost: 200</button>
-        <button class='upgrader' onclick='buyUpgrade(5)'>Limit is multiplied based on Gain per second.<br />Currently: x<span id='upgrade5Effect'>1.00</span><br />Cost: 300</button>
-        <button class='upgrader' onclick='buyUpgrade(6)'>Investing in increasers is 1.25x more effective. <br />Cost: 500</button>
-        <button class='upgrader' onclick='buyUpgrade(7)'>Quadruple Gain per second!<br />Cost: 1000</button>
-        <br />
-        <p>Unlocks</p>
-        <button class='unlocker' onclick='buyUnlock(1)'>Unlock a button to increase Gain.<br />Cost: 10</button>
-        <button class='unlocker' onclick='buyUnlock(2)'>Unlock a button to increase Limit.<br />Cost: 100</button>
-        <button class='unlocker' onclick='buyUnlock(3)'>Unlock Buy Multipliers for Increasers.<br />Cost: 500</button>
-        <!--<button class='unlocker' onclick='buyUnlock(4)'>Unlock Time Until Effectively Reaching Limit.<br />Cost: 100</button>-->
+        <div class='progressBar' id='upgrades-unlocks-progress' data-width='0.5'>
+          <div class='progressMeter'></div>
+        </div>
+        <h2>Upgrades</h2>
+
+        <div id='upgradesList'><!-- The button child elements are created in a JS file. -->
+        </div>
+        <h2>Unlocks</h2>
+        <div id='unlocksList'><!-- The button child elements are created in a JS file. -->
+        </div>
       </div>
       <div class='tab' style='display: none'>
-        Settings go here...
-        <br />
         <button id='copyButton' onclick='copySave()'>Copy to clipboard</button>
         <button id='importButton' onclick='importSave()'>Import Save</button>
         <br />
+        <button id='autoSaveButton' onclick='toggleAutoSaving()'>AutoSave?</button>
+        <button id='autoSaveRateButton' disabled>AutoSaving Rate; Coming Soon!</button>
       </div>
       <div class='tab' style='display: none'>
         What useless feats you have achieved in this virtual game...

@@ -1,36 +1,23 @@
-var version = 'v1.0000';
+//This code is REALLY bad and unorganised right now.
+var version = 'v1.0100';
 document.getElementById('version').textContent = version;
 console.warn(`Why are you here in the console?`);
 let limit = 20;
 let gainPerSecond = 1;
-let unlockCosts = [10, 100, 500];
-let upgradeCosts = [20, 50, 100, 200, 300, 500, 1000];
 let investingEffectiveness = {
   limit: 1,
   gain: 1,
   global: 1,
 };
+let upgrades_unlocks_progress = 0;
 
 let dev = {
   timeMultiplier: 1,
 };
 
-let player = {
-  number: 0,
-  pointsInvestedInLimit: 0,
-  pointsInvestedInGain: 0,
-  settings: {
-    increaserBuyMultiplier: 1,
-    ticksPerSecond: 30,
-  },
-  time: {
-    lastTick: Date.now(),
-    firstTick: Date.now(),
-  },
-  unlocks: [],
-  upgrades: [],
-  rank: 0,
-};
+let player = {};
+reset();
+loadSave();
 
 function tab(tab) {
   let allTabs = document.getElementsByClassName('tab');
@@ -41,10 +28,16 @@ function tab(tab) {
 };
 
 tab(1);
+document.getElementById('autoSaveButton').className = player.settings.doAutoSaving ? 'on' : 'off';
 
 (function mainLoop() {
   setTimeout(mainLoop, 1000 / player.settings.ticksPerSecond);
   loop(); //Makes game go BRRRR.
+})();
+
+(function autoSaveLoop() {
+  setTimeout(autoSaveLoop, 60000 / player.settings.autoSavesPerMinute);
+  autoSave(); //Makes autosave go BRRRR.
 })();
 
 function loop() {
@@ -57,52 +50,34 @@ function loop() {
 function gameLoop(delta) {
   limit = Formula.limit();
   gainPerSecond = Formula.gain();
+  effectiveness = Formula.effectiveness();
+  investingEffectiveness.limit = 1 * 2.5 ** hasUpgrade(4);
+  investingEffectiveness.global = effectiveness;
   let pendingLimitIncrease = Formula.limit(player.pointsInvestedInLimit + player.number * player.settings.increaserBuyMultiplier * investingEffectiveness.limit * investingEffectiveness.global) - limit;
   let pendingGainIncrease = Formula.gain(player.pointsInvestedInGain + player.number * player.settings.increaserBuyMultiplier * investingEffectiveness.gain * investingEffectiveness.global) - gainPerSecond;
-  let gainPerSecondReal = (gainPerSecond) / (limit / (limit - player.number));
+  let pendingEffectivenessIncrease = Formula.effectiveness(player.pointsInvestedInEffectiveness + player.number * player.settings.increaserBuyMultiplier * investingEffectiveness.global) - effectiveness;
+  let gainPerSecondReal = gainPerSecond / Formula.gainDividerScaling();
+  player.upgrades = [...new Set(player.upgrades)];
+  player.unlocks = [...new Set(player.unlocks)];
+  upgrades_unlocks_progress = (player.upgrades.length + player.unlocks.length) / (upgrades.length + unlocks.length);
   //For below, test to see if the gain is equal for different FPS settings.
-  player.number += (gainPerSecond * delta / 1000) / (limit / (limit - player.number));
+  player.number += (gainPerSecond * delta / 1000) / Formula.gainDividerScaling();
   if (player.number > limit) player.number = limit;
-  investingEffectiveness.limit = 1 * 2.5 ** hasUpgrade(4);
-  investingEffectiveness.global = 1 * 1.25 ** hasUpgrade(6);
+  document.getElementById('autoSavingDisplay').innerHTML = player.settings.doAutoSaving ? `The game automatically saves every ${(60 / player.settings.autoSavesPerMinute === 1) ? 'second' : 60 / player.settings.autoSavesPerMinute + ' seconds'}.` : `The game is not currently autosaving.`;
+  document.getElementById('fpsDisplay').innerHTML = `The game currently runs at ${player.settings.ticksPerSecond} ticks per second.`;
   document.getElementById('number').innerHTML = player.number.notate();
   document.getElementById('limit').innerHTML = limit.notate();
   document.getElementById('gain').innerHTML = gainPerSecondReal.notate();
   document.getElementById('maxGain').innerHTML = gainPerSecond.notate();
+  document.getElementById('effectiveness').innerHTML = effectiveness.notate();
   document.getElementById('pendingLimitIncrease').innerHTML = pendingLimitIncrease.notate();
   document.getElementById('pendingGainIncrease').innerHTML = pendingGainIncrease.notate();
-  let allUpgrades = document.getElementsByClassName('upgrader');
-  for (let i = 0; i < allUpgrades.length; i++) {
-    let id = i + 1;
-    if (hasUpgrade(id)) allUpgrades[i].className = 'upgrader bought';
-    else if (player.number >= upgradeCosts[i]) allUpgrades[i].className = 'upgrader buyable';
-    else if (limit >= upgradeCosts[i]) allUpgrades[i].className = 'upgrader reachable';
-    else allUpgrades[i].className = 'upgrader unreachable';
-  };
-  let allUnlocks = document.getElementsByClassName('unlocker');
-  for (let i = 0; i < allUnlocks.length; i++) {
-    let id = i + 1;
-    if (hasUnlock(id)) allUnlocks[i].className = 'unlocker bought';
-    else if (player.number >= unlockCosts[i]) allUnlocks[i].className = 'unlocker buyable';
-    else if (limit >= unlockCosts[i]) allUnlocks[i].className = 'unlocker reachable';
-    else allUnlocks[i].className = 'unlocker unreachable';
-  };
+  document.getElementById('pendingEffectivenessIncrease').innerHTML = pendingEffectivenessIncrease.notate();
+  let idk = upgrades_unlocks_progress * 100;
+  document.getElementById('upgrades-unlocks-progress').dataset.width = idk.toPrecision(3), document.getElementById('upgrades-unlocks-progress').children[0].style.width = idk + '%';
 
-  // for (let id = 1; id < allUnlocks.length + 1; id++) {
-  //   if (hasUnlock(id)) {
-  //     allUnlocks[id - 1].style.display = 'none';
-  //   } else {
-  //     allUnlocks[id - 1].style.display = 'inline-block';
-  //   }
-  // }
+  CSSUpgradesAndUnlocks();
 
-  // for (let id = 1; id < allUpgrades.length + 1; id++) {
-  //   if (hasUpgrade(id)) {
-  //     allUpgrades[id - 1].style.display = 'none';
-  //   } else {
-  //     allUpgrades[id - 1].style.display = 'inline-block';
-  //   }
-  // }
   if (hasUnlock(1)) {
     document.getElementById('gainIncreaser').style.display = 'inline-block';
   } else {
@@ -118,6 +93,17 @@ function gameLoop(delta) {
   } else {
     document.getElementById('buyMultipliers').style.visibility = 'hidden';
   };
+  if (hasUnlock(4)) {
+    document.getElementById('effectivenessIncreaser').style.display = 'inline-block';
+  } else {
+    document.getElementById('effectivenessIncreaser').style.display = 'none';
+  };
+
+  if (hasUnlock(1) || hasUnlock(2) || hasUnlock(4)) {
+    document.getElementById('effectivenessDisplay').style.visibility = 'visible';
+  } else {
+    document.getElementById('effectivenessDisplay').style.visibility = 'hidden';
+  };
 
   let increaserBuyMultipliers = document.getElementsByClassName('increaserBuyMultiplier');
   for (let i = 0; i < increaserBuyMultipliers.length; i++) {
@@ -126,7 +112,6 @@ function gameLoop(delta) {
   }
 
   document.getElementById('upgrade5Effect').innerHTML = Formula.upgrade5Boost().notate();
-
   // document.getElementById('currentRank').innerHTML = getRank();
   // document.getElementById('nextRank').innerHTML = getRank(player.rank + 1);
 };
@@ -145,30 +130,15 @@ function increaseGain() {
   else player.number -= amountInvested;
 }
 
-function buyUnlock(id) {
-  let index = id - 1;
-  if (!hasUnlock(id) && player.number >= unlockCosts[index]) {
-    player.number -= unlockCosts[index];
-    player.unlocks.push(id);
-  };
-};
-
-function buyUpgrade(id) {
-  let index = id - 1;
-  if (!hasUpgrade(id) && player.number >= upgradeCosts[index]) {
-    player.number -= upgradeCosts[index];
-    player.upgrades.push(id);
-  };
-};
-
-function hasUnlock(id) {
-  return player.unlocks.includes(id);
-};
-
-function hasUpgrade(id) {
-  return player.upgrades.includes(id);
-};
+function increaseEffectiveness() {
+  let amountInvested = player.number * player.settings.increaserBuyMultiplier;
+  player.pointsInvestedInEffectiveness += amountInvested * investingEffectiveness.global;
+  if (player.settings.increaserBuyMultiplier === 1) player.number = 0;
+  else player.number -= amountInvested;
+}
 
 function changeIncreaserBuyMultiplier(ratio) {
   player.settings.increaserBuyMultiplier = ratio;
 }
+
+document.getElementsByClassName('progressMeter')[0].dataset.value = 0.9;

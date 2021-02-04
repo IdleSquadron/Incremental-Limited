@@ -7,12 +7,13 @@ Small (QoL/very small/bugfixing) updates are h4.
 -->
 <html>
   <head>
+    <title>Incremental Limited ChangeLog</title>
     <meta charset='utf-8' />
     <meta name='viewport' content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0' />
     <!--CSS stuff-->
     <style>
       html {
-        touch-action: manipliation;
+        touch-action: manipulation;
         font-family: helvetica, arial, sans-serif;
       }
       .intro-txt {
@@ -26,7 +27,6 @@ Small (QoL/very small/bugfixing) updates are h4.
         padding: 2px;
       }
     </style>
-    <script>var url=location.href,gl=document.getElementById('backToGameButton');function backToGame(){location.href='/Incremental-Limited'}</script>
   </head>
   <body>
     <p class='intro-txt center'>
@@ -37,11 +37,8 @@ Small (QoL/very small/bugfixing) updates are h4.
         Here is the history of changes made to the game.
       </i>
     </p>
-    <button id='backToGameButton' onclick='backToGame()'>
-      Back to Game
-    </button>
     <button onclick='window.scrollTo(0,document.body.scrollHeight);'>
-      View Recent Patch
+      View Most Recent Patches
     </button>
     <div id='updates-list'>
       <h2>v1.0000 - 2 Feburary 2021</h2>
@@ -50,7 +47,7 @@ Small (QoL/very small/bugfixing) updates are h4.
         <li>Originally started out as a test game.</li>
         <li>Added Limit and the gain decrease scaling concept (gain is divided by [limit divided by the difference between number and limit]).</li>
         <li>Implemented the 1st 2 increaser buttons; the limit and gain increasers.
-          <ul><li>And the 1%, 10%, 25%, 50%, and 100% increaser buy mlitipliers to go along with it.</li></ul>
+          <ul><li>And the 1%, 10%, 25%, 50%, and 100% increaser buy multipliers to go along with it.</li></ul>
         </li>
         <li>Included the 1st 7 upgrades and the 1st 3 unlocks.</li>
         <li>Colour-coding for the upgrade and unlock buttons.
@@ -58,9 +55,27 @@ Small (QoL/very small/bugfixing) updates are h4.
             <li>Green = bought, Light Green = buyable & pointer cursor, Yellow = reachable and Grey = unreachable & not-allowed cursor.</li>
           </ul>
         </li>
+        <li>Can 'run' in another tab, through utilising Delta Timing. Also offline progress.</li>
         <li>Number and Settings tabs.</li>
         <li>Simple, bare-bones import/export system. Hovering on the <i>Copy to clipboard</i> button sets the cursor to 'copy'.</li>
+        <li>Minor number formatting, but no proper notations.</li>
       </ul>
+      <h2>v1.0100 - 4 Feburary 2021</h2>
+      Summary:
+      <ul>
+        <li>Nerfed the 7th upgrade, added an upgrade before it and added 2 new upgrades, bringing the total count to 10!<br />Also added a new unlock - the Investing Effectiveness Increaser.</li>
+        <li>Added the Investing Effectiveness concept - it multiplies the points invested to the increasers (including itself) for reaching even greater numbers!</li>
+        <li>The game now autosaves every second! This is currently toggleable with a setting.</li>
+        <li>GDS (Gain Divider Scaling) is now reducible with a Number upgrade.</li>
+        <li>Added a progress bar, which illustrates the progress of completion with the upgrades and unlocks. Added a display for the accurate percentage that shows when hovered.</li>
+        <li>Added a function to convert older saves to the equivalent save with the up-to-date values.</li>
+        <li>Added more cursor stuff.</li>
+        <li>Added a few statuses to the top left of the screen.</li>
+        <li>Upgrades and unlocks are now initiated purely using JS.</li>
+        <li>Minor CSS tweaks.</li>
+        <li>And, other minor game (and code) fixes and tag changes.</li>
+      </ul>
+      <!-- next update: summary: Hard Reset added - now you don't need to open the console to type in "reset()"!-->
     </div><!-- End of Updates list. -->
   </body>
 </html>
