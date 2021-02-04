@@ -20,6 +20,16 @@ a {
   cursor: alias;
 }
 
+#statusDisplay {
+  font-size: smaller;
+  text-align: left;
+  font-size: 17.5px;
+  position: fixed;
+  margin: 0px;
+  padding: 0px;
+  z-index: 0;
+}
+
 p {
   display: block;
   margin-block-start: 0.5em;
@@ -103,15 +113,6 @@ button[disabled] {
 
 #importButton {
   cursor: alias;
-}
-#statusDisplay {
-  font-size: smaller;
-  text-align: left;
-  font-size: 17.5px;
-  position: fixed;
-  margin: 0px;
-  padding: 0px;
-  z-index: 0;
 }
 
 #mainDisplay {
